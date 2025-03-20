@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckList KotoFey</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .task-item {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        const WebApp = window.Telegram.WebApp;
+        WebApp.ready();
+
+        const user = WebApp.initDataUnsafe.user;
+        if (!user) {
+            document.getElementById('app').innerHTML = '<h1>Ошибка авторизации</h1>';
+        } else {
+            document.getElementById('app').innerHTML = `
+                <h1>Привет, ${user.first_name}!</h1>
+                <div id="checklist">
+                    <div class="task-item"><input type="checkbox" id="task1"> <label for="task1">Волосы чистые (собранные в пучок)</label></div>
+                    <div class="task-item"><input type="checkbox" id="task2"> <label for="task2">Вынесен штендер</label></div>
+                    <div class="task-item"><input type="checkbox" id="task3"> <label for="task3">Входная дверь открыта</label></div>
+                    <div class="task-item"><input type="checkbox" id="task4"> <label for="task4">Зачекиниться в Глово и Wolt</label></div>
+                    <div class="task-item"><input type="checkbox" id="task5"> <label for="task5">Открыть кассовую смену в Loyverse POS</label></div>
+                </div>
+                <button onclick="submitChecklist()">Отправить отчет</button>
+            `;
+        }
+
+        function submitChecklist() {
+            const tasks = [
+                document.getElementById('task1').checked,
+                document.getElementById('task2').checked,
+                document.getElementById('task3').checked,
+                document.getElementById('task4').checked,
+                document.getElementById('task5').checked
+            ];
+            if (tasks.every(task => task)) {
+                WebApp.showAlert('Отчет отправлен! Все задачи выполнены.');
+            } else {
+                WebApp.showAlert('Пожалуйста, выполни все задачи перед отправкой.');
+            }
+        }
+    </script>
+</body>
+</html>
